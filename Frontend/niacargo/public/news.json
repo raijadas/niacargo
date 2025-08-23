@@ -1,0 +1,5 @@
+{ "updated":"2025-08-23",
+  "items":[
+    {"title":"Test item while local","link":"https://example.com","summary":"This appears when /api/news is unavailable."}
+  ]
+}
