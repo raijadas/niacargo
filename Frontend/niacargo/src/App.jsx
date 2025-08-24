@@ -197,7 +197,7 @@ const MILESTONES = [
 ];
 const GALLERY = [
   { id: "g1", src: "/gallery/PTB.gif", caption: "Terminal roof trusses at sunset" },
-  { id: "g2", src: "/gallery/runway.gif", caption: "Runway edge lighting" },
+  { id: "g2", src: "/gallery/Runway.gif", caption: "Runway edge lighting" },
   { id: "g3", src: "/gallery/ATC.gif", caption: "ATC tower cladding" }
 ];
 
