@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState, useEffect, useRef } from "react";
 import NewsFeed from "./components/NewsFeed";
 
@@ -63,22 +62,144 @@ function MapPane({ lat = 28.1006, lng = 77.5536, zoom = 12, title = "Site & Acce
   );
 }
 
+/**************** Content Blocks (deep-dive but UI friendly) ****************/
+const Section = ({ title, subtitle, children }) => (
+  <section className="py-10 sm:py-14 border-t border-gray-100 dark:border-gray-800">
+    <Container>
+      <div className="mb-6 flex items-end justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+          {subtitle && <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{subtitle}</p>}
+        </div>
+      </div>
+      {children}
+    </Container>
+  </section>
+);
+
+function DidYouKnowGrid() {
+  const items = [
+    { emoji: "📦", title: "Cargo Hub", text: "Phase‑1 multi‑modal cargo campus planned with integrated warehousing and direct airside access for fast turnaround." },
+    { emoji: "🛫", title: "Runway & Nav‑Aids", text: "Code‑E capable runway with modern lighting and nav‑aids; calibration precedes DGCA/BCAS clearances." },
+    { emoji: "🚄", title: "Access & Mobility", text: "Expressway interchange and app‑based last‑mile partners improve time‑to‑terminal for NCR." },
+    { emoji: "🧩", title: "Systems Readiness", text: "CNS/ICT integration and utilities are typical critical‑path items before trial ops." },
+  ];
+  return (
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map((it, i) => (
+        <Card key={i}><div className="text-2xl">{it.emoji}</div><div className="mt-2 text-base font-semibold">{it.title}</div><p className="mt-1 text-sm text-gray-600 dark:text-gray-300">{it.text}</p></Card>
+      ))}
+    </div>
+  );
+}
+
+function CargoOverview() {
+  const bullets = [
+    "Developer: AISATS (Air India SATS) under DBFOT model for the Multi‑Modal Cargo Hub.",
+    "Phase‑1 footprint ~87 acres: Integrated Cargo Terminal (ICT) + Integrated Warehousing & Logistics Zone (IWLZ).",
+    "First‑in‑India: direct ICT ↔ IWLZ connectivity for faster cargo flows.",
+    "Product mix: general freight, e‑commerce/express; pharma/perishables via future cool‑chain modules.",
+  ];
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <Card>
+        <div className="text-lg font-semibold">NIA Cargo — Snapshot</div>
+        <ul className="mt-3 list-disc pl-5 text-sm text-gray-700 dark:text-gray-300">
+          {bullets.map((b, i) => (<li key={i}>{b}</li>))}
+        </ul>
+      </Card>
+      <Card>
+        <div className="text-lg font-semibold">Why it matters</div>
+        <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">The campus is positioned to serve exporters and manufacturers across Noida–Greater Noida–Yamuna Expressway with seamless air‑to‑road movement, reducing dwell times for express and high‑value goods.</p>
+        <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+          {[
+            { k: "Phase‑1", v: "87 acres" },
+            { k: "Throughput", v: "~2.5 lakh TPA" },
+            { k: "Connectivity", v: "ICT ↔ IWLZ" },
+          ].map((x) => (
+            <div key={x.k} className="rounded-xl bg-gray-50 p-3 dark:bg-white/5">
+              <div className="text-xs text-gray-500">{x.k}</div>
+              <div className="text-sm font-semibold">{x.v}</div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
+function ConnectivitySpotlight() {
+  const items = [
+    { icon: "🛣️", title: "Expressway Access", body: "New Delhi–Jewar expressway (policy‑approved) aims to decongest and cut travel times; interchange works near completion on YEW side." },
+    { icon: "🚕", title: "Last‑Mile Partners", body: "App‑based mobility (e.g., Uber, Rapido) onboarded for 24×7 pickups with dedicated zones." },
+    { icon: "🧠", title: "Airport Tech Ops", body: "Managed service model (e.g., Kyndryl) for ICT operations and service integration across systems." },
+  ];
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      {items.map((x, i) => (
+        <Card key={i}><div className="text-2xl">{x.icon}</div><div className="mt-1 font-semibold">{x.title}</div><p className="text-sm text-gray-600 dark:text-gray-300">{x.body}</p></Card>
+      ))}
+    </div>
+  );
+}
+
+function LicensingChecklist() {
+  const rows = [
+    { step: "Calibration/Validation flights", status: "Done/ongoing" },
+    { step: "Utilities & safety systems", status: "Closeout" },
+    { step: "DGCA Aerodrome Licence", status: "Pending issue" },
+    { step: "BCAS Security approvals", status: "Pending issue" },
+    { step: "Trial operations", status: "Before public opening" },
+  ];
+  return (
+    <Card>
+      <div className="text-lg font-semibold">Readiness & Licensing</div>
+      <div className="mt-3 divide-y divide-gray-200 text-sm dark:divide-gray-800">
+        {rows.map((r, i) => (
+          <div key={i} className="flex items-center justify-between py-2">
+            <span className="text-gray-600 dark:text-gray-300">{r.step}</span>
+            <span className={`rounded-full px-2 py-0.5 text-xs ${r.status.includes("Pending")?"bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-100":"bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-100"}`}>{r.status}</span>
+          </div>
+        ))}
+      </div>
+    </Card>
+  );
+}
+
+function TopNewsStrip() {
+  const [items, setItems] = useState([]);
+  const [err, setErr] = useState("");
+  useEffect(() => { (async () => { try { const r = await fetch("/api/news?"+Date.now(), { cache: "no-store" }); const j = await r.json(); setItems((j.items||[]).slice(0,3)); } catch(e){ setErr("Failed to load headlines."); } })(); }, []);
+  return (
+    <Card>
+      <div className="text-lg font-semibold">Latest Headlines</div>
+      {err && <div className="mt-2 text-sm text-red-600">{err}</div>}
+      <ul className="mt-3 space-y-2">
+        {items.map((it, i) => (
+          <li key={i} className="text-sm">
+            <a href={it.link} target="_blank" rel="noopener noreferrer nofollow" className="text-blue-700 hover:underline">{it.title || it.link}</a>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+}
+
 /**************** Demo content ****************/
-const TARGET_OPEN_DATE = "2025-09-31T00:00:00+05:30";
+const TARGET_OPEN_DATE = "2025-10-31T00:00:00+05:30"; // valid date
 const MILESTONES = [
   { id: 1, title: "Runway 1 – Paving & Lighting", percent: 100, status: "Completed", tag: "Airside" },
   { id: 2, title: "ATC Tower – Fit‑Out", percent: 72, status: "On Track", tag: "Airside" },
   { id: 3, title: "Passenger Terminal – Facade", percent: 63, status: "On Track", tag: "Landside" },
-  { id: 4, title: "Cargo/Utility Blocks – MEP", percent: 85, status: "on Track", tag: "Support" },
-  { id: 5, title: "Approach Roads & Interchange", percent: 90, status: "on Track", tag: "Access" },
+  { id: 4, title: "Cargo/Utility Blocks – MEP", percent: 85, status: "On Track", tag: "Support" },
+  { id: 5, title: "Approach Roads & Interchange", percent: 90, status: "On Track", tag: "Access" },
   { id: 6, title: "Security & ICT Systems", percent: 55, status: "On Track", tag: "Systems" }
 ];
 const GALLERY = [
-  { id: "g1", src: "./gallery/PTB.gif?q=80&w=1600&auto=format&fit=crop", caption: "Terminal roof trusses at sunset" },
-  { id: "g2", src: "./gallery/runway.gif?q=80&w=1600&auto=format&fit=crop", caption: "Runway edge lighting" },
-  { id: "g3", src: "./gallery/ATC.gif?q=80&w=1600&auto=format&fit=crop", caption: "ATC tower cladding" }
+  { id: "g1", src: "/public/gallery/PTB.gif", caption: "Terminal roof trusses at sunset" },
+  { id: "g2", src: "/public/gallery/runway.gif", caption: "Runway edge lighting" },
+  { id: "g3", src: "/public/gallery/ATC.gif", caption: "ATC tower cladding" }
 ];
-
 
 /**************** App ****************/
 export default function App() {
@@ -96,7 +217,7 @@ export default function App() {
     "NIA Cargo terminal",
     "Noida airport timeline",
     "Noida Airport live news",
-    "nouda airport updates", // include common misspelling
+    "nouda airport updates",
     "Uttar Pradesh aviation infrastructure",
     "Greenfield airport India",
     "runway paving lighting",
@@ -121,25 +242,30 @@ export default function App() {
                 <div className="text-lg font-semibold -mt-1">Progress & Community Hub</div>
               </div>
             </div>
-            <nav className="hidden gap-1 sm:flex">
+
+            <nav className="hidden sm:flex gap-1 justify-start">
               {["home","progress","updates","gallery","tools","about"].map((key) => (
-                <button key={key} onClick={() => setTab(key)} className={`rounded-xl px-3 py-2 text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800 ${tab===key?"bg-gray-100 dark:bg-gray-800":''}`}>{key[0].toUpperCase()+key.slice(1)}</button>
+                <button key={key} onClick={() => setTab(key)}
+                  className={`rounded-xl px-3 py-2 text-sm font-medium transition hover:bg-gray-100 dark:hover:bg-gray-800 ${tab===key?"bg-gray-100 dark:bg-gray-800":''}`}>
+                  {key[0].toUpperCase()+key.slice(1)}
+                </button>
               ))}
             </nav>
-            <button onClick={() => setTab("updates")}
-            className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-            >
-            <span className="relative z-10">Daily Pulse</span>
-            <span className="absolute inset-0 -z-0 h-full w-full bg-white/10 opacity-0 transition-opacity duration-300 hover:opacity-20" />
+
+            <button
+              onClick={() => setTab("updates")}
+              className="relative overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:scale-105 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
+              <span className="relative z-10">Daily Pulse</span>
+              <span className="absolute inset-0 -z-0 h-full w-full bg-white/10 opacity-0 transition-opacity duration-300 hover:opacity-20" />
             </button>
           </div>
         </Container>
       </header>
 
-      {/* HOME — vertical layout with hero, stats, BLOGS, and live news */}
+      {/* HOME — hero, stats, deep content, and live news */}
       {tab === "home" && (
         <>
-          <SEO title="Noida International Airport Construction Progress | NIA Progress" description="Live Noida International Airport (Jewar) & NIA Cargo tracker: milestones, timeline, photos, daily news, blog, map, and opening countdown." keywords={seoKeywords} />
+          <SEO title="Noida International Airport Construction Progress | NIA Progress" description="Live Noida International Airport (Jewar) & NIA Cargo tracker: milestones, timeline, photos, deep insights, daily news, map, and opening countdown." keywords={seoKeywords} />
 
           {/* Hero */}
           <section className="relative overflow-hidden">
@@ -160,6 +286,12 @@ export default function App() {
             </Container>
           </section>
 
+          {/* Deep content blocks */}
+          <Section title="Did You Know?" subtitle="Quick facts about Noida International Airport (Jewar) and the cargo ecosystem."><DidYouKnowGrid /></Section>
+          <Section title="NIA Cargo (MMCH)" subtitle="Campus structure, developer and product mix."><CargoOverview /></Section>
+          <Section title="Connectivity Spotlight" subtitle="Access projects, last‑mile mobility and operations."><ConnectivitySpotlight /></Section>
+          <Section title="Readiness & Licensing"><LicensingChecklist /></Section>
+          <Section title="Top News"><TopNewsStrip /></Section>
 
           {/* DAILY PULSE (live Google Alerts) */}
           <section className="py-10 sm:py-14 border-t border-gray-100 dark:border-gray-800">
@@ -186,12 +318,18 @@ export default function App() {
                   <Card key={m.id}><div className="flex items-start justify-between gap-4"><div><div className="text-lg font-semibold">{m.title}</div><div className="mt-1 flex items-center gap-2 text-xs text-gray-500"><span className="rounded-full bg-gray-100 px-2 py-0.5 dark:bg-gray-800">{m.tag}</span><span className={`rounded-full px-2 py-0.5 ${m.status==="Completed"?"bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-200":m.status==="On Track"?"bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-100":"bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-100"}`}>{m.status}</span></div></div><div className="w-20 text-right text-sm font-medium">{m.percent}%</div></div><div className="mt-3"><ProgressBar value={m.percent} /></div></Card>
                 ))}
               </div>
+
+              <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
+                <LicensingChecklist />
+                <MapPane />
+                <TopNewsStrip />
+              </div>
             </Container>
           </section>
         </>
       )}
 
-      {/* UPDATES (standalone tab) */}
+      {/* UPDATES */}
       {tab === "updates" && (
         <>
           <SEO title="Daily News — Noida International Airport (Google Alerts feed)" description="Latest NIA / Noida airport news curated via Google Alerts. Live updates, headlines and quick summaries." keywords={seoKeywords} />
@@ -225,7 +363,7 @@ export default function App() {
           <SEO title="Tools — Countdown, Newsletter & Downloads (NIA)" description="Utilities for the NIA project: opening countdown, newsletter signup and media/downloads for Noida International Airport / NIA Cargo." keywords={seoKeywords} />
           <section className="pt-6 pb-12 sm:pt-8 sm:pb-14">
             <Container>
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3"><Card><div className="text-lg font-semibold">Countdown to Opening</div><div className="mt-2"><Countdown target={TARGET_OPEN_DATE} /></div></Card><Card><div className="text-lg font-semibold">Newsletter</div><div className="mt-2 text-sm text-gray-600 dark:text-gray-300">Connect to Formspree/Netlify Forms.</div><div className="mt-3 flex gap-2"><input className="w-full rounded-xl border px-3 py-2 text-sm" placeholder="you@example.com" /><button className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Subscribe</button></div></Card><Card><div className="text-lg font-semibold">Downloads</div><ul className="mt-3 list-disc pl-6 text-sm"><li><a className="underline" href="#">Monthly Progress PDF (sample)</a></li><li><a className="underline" href="#">Site Access & Safety Checklist</a></li><li><a className="underline" href="#">Media Kit & Logo Pack</a></li></ul></Card></div>
+              <div className="grid grid-cols-1 gap-4 lg:grid-cols-3"><Card><div className="text-lg font-semibold">Countdown to Opening</div><div className="mt-2"><Countdown target={TARGET_OPEN_DATE} /></div></Card><Card><div className="text-lg font-semibold">Newsletter</div><div className="mt-2 text-sm text-gray-600 dark:text-gray-300">Connect to Formspree/Netlify Forms.</div><div className="mt-3 flex gap-2"><input className="w-full rounded-xl border px-3 py-2 text-sm" placeholder="you@example.com" /><button className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Subscribe</button></div></Card><Card><div className="text-lg font-semibold">Downloads</div><ul className="mt-3 list-disc pl-6 text-sm"><li><a className="underline" href="#">Factsheet: Phase‑1 (12 MPA, ~249k tpa cargo, IATA DXN, Zurich/YIAPL)</a></li><li><a className="underline" href="#">Cargo hub explainer: MMCH (87 acres, ICT+IWLZ, express/pharma flows)</a></li><li><a className="underline" href="#">Partnerships: Mobility & ICT ops</a></li></ul></Card></div>
             </Container>
           </section>
         </>
@@ -237,7 +375,16 @@ export default function App() {
           <SEO title="About — NIA Progress (Independent tracker)" description="Independent tracker for Noida International Airport (Jewar) and NIA Cargo with daily news, gallery, timeline and more." keywords={seoKeywords} />
           <section className="pt-6 pb-12 sm:pt-8 sm:pb-14">
             <Container>
-              <div className="prose prose-gray max-w-none dark:prose-invert"><h2>About this site</h2><p>This site tracks <strong>Noida International Airport (Jewar)</strong> and <strong>NIA Cargo</strong> with real‑time updates on the runway, terminal facade, cargo development, ATC tower fit‑out, approach roads and ICT/security systems. Follow the opening timeline, read curated news and explore the photo gallery.</p></div>
+              <div className="prose prose-gray max-w-none dark:prose-invert">
+                <h2>About this site</h2>
+                <p>We track <strong>Noida International Airport (Jewar)</strong> and <strong>NIA Cargo</strong> through construction to commissioning. The project is developed by <strong>YIAPL</strong> (Zurich Airport Group) with public‑side SPV <strong>NIAL</strong>. Phase‑1 is designed for ~12 MPA with a planned ~249k tonnes cargo capacity and future multi‑runway, multi‑terminal expansion.</p>
+                <h3>What to watch next</h3>
+                <ul>
+                  <li>Utilities close‑out, systems integration and calibration flights.</li>
+                  <li>DGCA aerodrome licence and BCAS security clearances.</li>
+                  <li>Trial operations leading into the opening window.</li>
+                </ul>
+              </div>
               <p className="mt-6 text-xs text-gray-500">Keywords: Noida International Airport updates, Jewar airport news, NIA Cargo, construction progress, opening date, runway paving, terminal glazing, cargo terminal, ATC tower, approach roads, NIA site photos, Noida airport map, daily news feed, nouda airport.</p>
             </Container>
           </section>
