@@ -196,9 +196,9 @@ const MILESTONES = [
   { id: 6, title: "Security & ICT Systems", percent: 55, status: "On Track", tag: "Systems" }
 ];
 const GALLERY = [
-  { id: "g1", src: "/public/gallery/PTB.gif", caption: "Terminal roof trusses at sunset" },
-  { id: "g2", src: "/public/gallery/runway.gif", caption: "Runway edge lighting" },
-  { id: "g3", src: "/public/gallery/ATC.gif", caption: "ATC tower cladding" }
+  { id: "g1", src: "/gallery/PTB.gif", caption: "Terminal roof trusses at sunset" },
+  { id: "g2", src: "/gallery/runway.gif", caption: "Runway edge lighting" },
+  { id: "g3", src: "/gallery/ATC.gif", caption: "ATC tower cladding" }
 ];
 
 /**************** App ****************/
